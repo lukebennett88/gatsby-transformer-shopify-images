@@ -46,7 +46,7 @@
     "prettier": "^2.0.2"
   },
   "scripts": {
-    "build": "gatsby build",
+    "build": "GATSBY_EXPERIMENTAL_PAGE_BUILD_ON_DATA_CHANGES=true gatsby build --log-pages",
     "build:serve": "yarn build && yarn serve",
     "clean": "gatsby clean",
     "develop": "gatsby develop --host=0.0.0.0 --open",
