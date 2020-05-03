@@ -1,6 +1,4 @@
-/* eslint-disable no-shadow */
 import React, { useState, useEffect, useMemo } from 'react';
-import Image from 'gatsby-image';
 import { graphql } from 'gatsby';
 import PropTypes from 'prop-types';
 
@@ -12,56 +10,74 @@ import {
 import { Layout, SEO, Alert, Thumbnail, OptionPicker } from '../components';
 
 export default function ProductPage({ data: { shopifyProduct: product } }) {
-  // const colors = product.options.find(
-  //   (option) => option.name.toLowerCase() === 'color'
-  // ).values;
-  const sizes = product.options.find(
-    (option) => option.name.toLowerCase() === 'size'
-  ).values;
+  // Get available colours
+  const colours =
+    product.options.find((option) => option.name.toLowerCase() === 'colour')
+      ?.values || [];
 
+  // Get available sizes
+  const sizes =
+    product.options.find((option) => option.name.toLowerCase() === 'size')
+      ?.values || [];
+
+  // Format the data we get back from GraphQL for variants to be a little easier to work with
+  // See comment in `prepare-variants-with-options.js`
   const variants = useMemo(() => prepareVariantsWithOptions(product.variants), [
     product.variants,
   ]);
-  const images = useMemo(() => prepareVariantsImages(variants, 'color'), [
+
+  // Format the data we get back from GraphQL for images to be a little easier to work with
+  // See comment in `prepare-variants-images.js`
+  const images = useMemo(() => prepareVariantsImages(variants, 'size'), [
     variants,
   ]);
 
-  if (images.length < 1) {
-    throw new Error('Must have at least one product image!');
-  }
-
-  const addItemToCart = useAddItemToCart();
+  // Keep variants in state, and set the default variant to be the first item
   const [variant, setVariant] = useState(variants[0]);
-  const [color, setColor] = useState(variant.color);
+
+  // Keep different colour options in state
+  const [colour, setColour] = useState(variant.colour);
+
+  // Keep different sizes in state
   const [size, setSize] = useState(variant.size);
+
+  // Manage add to cart alerts in state
   const [addedToCartMessage, setAddedToCartMessage] = useState(null);
 
+  // Use a custom hook for adding items to cart
+  const addItemToCart = useAddItemToCart();
+
+  // Whenever we add an item to the cart, also create an alert to notify the customer of this
+  // Note: we are hard coding the number of items to be added to cart as 1, we can add another useState instance to address this in the future if we need to
+  function handleAddToCart() {
+    addItemToCart(variant.shopifyId, 1);
+    setAddedToCartMessage('Added to your cart!');
+  }
+
+  // This handles adding the correct variant to the cart
   useEffect(() => {
-    const newVariant = variants.find((variant) => {
-      return variant.size === size && variant.color === color;
+    const newVariant = variants.find((v) => {
+      return v.size === size && v.colour === colour;
     });
 
     if (variant.shopifyId !== newVariant.shopifyId) {
       setVariant(newVariant);
     }
-  }, [size, color, variants, variant.shopifyId]);
+  }, [size, colour, variants, variant.shopifyId]);
 
-  const gallery =
-    images.length > 1 ? (
-      <div className="grid grid-cols-6 gap-2">
+  function Gallery() {
+    if (images.length < 1) return null;
+    return (
+      <div className="grid grid-cols-5 gap-4">
         {images.map((image) => (
           <Thumbnail
-            key={image.color}
+            key={image.size}
             src={image.src}
-            onClick={() => setColor(image.color)}
+            onClick={() => setSize(image.size)}
           />
         ))}
       </div>
-    ) : null;
-
-  function handleAddToCart() {
-    addItemToCart(variant.shopifyId, 1);
-    setAddedToCartMessage('🛒 Added to your cart!');
+    );
   }
 
   return (
@@ -75,12 +91,15 @@ export default function ProductPage({ data: { shopifyProduct: product } }) {
               dismiss={() => setAddedToCartMessage(null)}
             />
           )}
-          <div>
-            <Image
-              fluid={variant.image.localFile.childImageSharp.fluid}
-              className="overflow-hidden rounded-md shadow"
-            />
-            {gallery}
+          <div className="grid gap-4">
+            <div className="h-96">
+              <img
+                src={variant.image?.originalSrc}
+                alt=""
+                className="object-cover w-full h-full overflow-hidden rounded-md shadow"
+              />
+            </div>
+            <Gallery />
           </div>
           <div className="flex flex-col mt-16">
             <h1 className="text-2xl font-extrabold leading-8 tracking-tight text-gray-900 sm:text-3xl sm:leading-9">
@@ -91,13 +110,13 @@ export default function ProductPage({ data: { shopifyProduct: product } }) {
               className="mt-4 text-base leading-6 text-gray-500 sm:mt-3"
             />
             <div className="grid grid-cols-2">
-              {/* <OptionPicker
-                key="Color"
-                name="Color"
-                options={colors}
-                selected={color}
-                onChange={(event) => setColor(event.target.value)}
-              /> */}
+              <OptionPicker
+                key="Colour"
+                name="Colour"
+                options={colours}
+                selected={colour}
+                handleChange={(event) => setColour(event.target.value)}
+              />
               <OptionPicker
                 name="Size"
                 options={sizes}
@@ -147,13 +166,7 @@ export const ProductPageQuery = graphql`
           value
         }
         image {
-          localFile {
-            childImageSharp {
-              fluid(maxWidth: 446) {
-                ...GatsbyImageSharpFluid_withWebp
-              }
-            }
-          }
+          originalSrc
         }
       }
     }
