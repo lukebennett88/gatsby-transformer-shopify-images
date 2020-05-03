@@ -1,11 +1,13 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Image from 'gatsby-image';
+
+import { resizeShopifyImage } from '../../utilities';
 
 export const Thumbnail = ({ src, onClick }) => {
+  const imgSrc = resizeShopifyImage({ url: src.originalSrc, width: 160 });
   return (
     <button onClick={onClick} type="button">
-      <Image fluid={src.localFile.childImageSharp.fluid} />
+      <img src={imgSrc} alt="" className="overflow-hidden rounded-md shadow" />
     </button>
   );
 };
