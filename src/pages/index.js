@@ -18,7 +18,7 @@ const IndexPage = () => {
             slug={product.handle}
             title={product.title}
             price={Number(product.priceRange.minVariantPrice.amount)}
-            image={product.images[0].localFile.childImageSharp.fluid}
+            image={product.images[0].originalSrc}
           />
         ))}
       </div>
