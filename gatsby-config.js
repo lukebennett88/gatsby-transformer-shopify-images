@@ -71,7 +71,7 @@ module.exports = {
       },
     },
     {
-      resolve: require.resolve('../gatsby/packages/gatsby-source-shopify'),
+      resolve: 'gatsby-source-shopify',
       options: {
         // The domain name of your Shopify shop. This is required.
         // Example: 'gatsby-source-shopify-test-shop' if your Shopify address is
