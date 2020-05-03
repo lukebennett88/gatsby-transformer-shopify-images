@@ -1,19 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Image from 'gatsby-image';
 import { Link } from 'gatsby';
 
 import { useGraphQL } from '../hooks';
+import { resizeShopifyImage } from '../utilities';
 
-const Tile = ({ title, slug, price, image }) => {
-  const data = useGraphQL();
+export function Tile({ title, slug, price, image }) {
+  const { placeholderImage } = useGraphQL();
 
-  const imageSrc = image || data.placeholderImage.childImageSharp.fluid;
+  const imageSrc =
+    resizeShopifyImage({ url: image, width: 600 }) ||
+    placeholderImage.childImageSharp.fluid.src;
 
   return (
     <div className="flex flex-col overflow-hidden rounded-lg shadow-lg">
       <div className="flex-shrink-0">
-        <Image fluid={imageSrc} className="w-full h-64" />
+        <img src={imageSrc} className="w-full h-64" alt="" />
       </div>
       <div className="flex flex-col justify-between flex-1 p-6 bg-white">
         <div className="flex-1">
@@ -35,10 +37,10 @@ const Tile = ({ title, slug, price, image }) => {
       </div>
     </div>
   );
-};
+}
 
 Tile.propTypes = {
-  image: PropTypes.object,
+  image: PropTypes.string,
   price: PropTypes.number,
   slug: PropTypes.string,
   title: PropTypes.string,
@@ -48,5 +50,3 @@ Tile.defaultProps = {
   title: "Men's Down Jacket",
   price: '50',
 };
-
-export { Tile };
