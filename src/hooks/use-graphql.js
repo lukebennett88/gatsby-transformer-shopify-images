@@ -21,7 +21,7 @@ export function useGraphQL() {
         placeholderImage: file(relativePath: { eq: "placeholder/shoe.png" }) {
           childImageSharp {
             fluid(maxWidth: 600) {
-              ...GatsbyImageSharpFluid_withWebp
+              src
             }
           }
         }
@@ -29,13 +29,7 @@ export function useGraphQL() {
           nodes {
             shopifyId
             image {
-              localFile {
-                childImageSharp {
-                  fluid(maxWidth: 120) {
-                    ...GatsbyImageSharpFluid_withWebp
-                  }
-                }
-              }
+              originalSrc
             }
           }
         }
@@ -44,13 +38,7 @@ export function useGraphQL() {
             title
             handle
             images {
-              localFile {
-                childImageSharp {
-                  fluid(maxWidth: 512) {
-                    ...GatsbyImageSharpFluid_withWebp
-                  }
-                }
-              }
+              originalSrc
             }
             priceRange {
               minVariantPrice {
