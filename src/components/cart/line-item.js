@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'gatsby';
-import Image from 'gatsby-image';
 
 import { useGraphQL, useRemoveItemFromCart } from '../../hooks';
+import { resizeShopifyImage } from '../../utilities';
 
 export const LineItem = ({ item }) => {
   const {
@@ -29,13 +29,14 @@ export const LineItem = ({ item }) => {
     return selectedProduct ? selectedProduct.handle : null;
   }
 
-  function getImageFluidForVariant(variantId) {
+  function getImageSrcForVariant(variantId) {
     const selectedVariant = variants.find((variant) => {
       return variant.shopifyId === variantId;
     });
 
     if (selectedVariant) {
-      return selectedVariant.image.localFile.childImageSharp.fluid;
+      const x = selectedVariant.image.originalSrc;
+      return resizeShopifyImage({ url: x, width: 288 });
     }
     return null;
   }
@@ -44,7 +45,11 @@ export const LineItem = ({ item }) => {
     <div className="flex items-center justify-between">
       <div className="flex items-center">
         <div className="w-48 overflow-hidden rounded-md shadow">
-          <Image fluid={getImageFluidForVariant(item.variant.id)} />
+          <img
+            src={getImageSrcForVariant(item.variant.id)}
+            alt=""
+            className="object-cover w-full h-full"
+          />
         </div>
         <div className="ml-4">
           <Link
