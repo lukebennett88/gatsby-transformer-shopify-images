@@ -98,6 +98,8 @@ module.exports = {
         // Possible values are: 'shop' and 'content'.
         // Defaults to ['shop', 'content'].
         includeCollections: ['shop'],
+        // option to disable product images
+        downloadImages: true,
       },
     },
   ],
