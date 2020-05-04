@@ -48,6 +48,7 @@
   "scripts": {
     "build": "GATSBY_EXPERIMENTAL_PAGE_BUILD_ON_DATA_CHANGES=true gatsby build --log-pages",
     "build:serve": "yarn build && yarn serve",
+    "plugin-install": "cd ./plugins/gatsby-source-shopify && npm install && cd ../..",
     "clean": "gatsby clean",
     "develop": "gatsby develop --host=0.0.0.0 --open",
     "lint": "eslint .",
