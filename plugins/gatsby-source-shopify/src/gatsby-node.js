@@ -3,6 +3,7 @@ import chalk from 'chalk';
 import { forEach } from 'p-iteration';
 import { printGraphQLError, queryAll, queryOnce } from './lib';
 import { createClient } from './create-client';
+import PluginOptions from './PluginOptions';
 
 import {
   ArticleNode,
@@ -53,8 +54,18 @@ export const sourceNodes = async (
     verbose = true,
     paginationSize = 250,
     includeCollections = [SHOP, CONTENT],
+    downloadImages = true,
   }
 ) => {
+  // created this singalton class as a quick way to reference options anywhere within the plugin
+  PluginOptions.setShopName(shopName)
+    .setAccessToken(accessToken)
+    .setApiVersion(apiVersion)
+    .setVerbose(verbose)
+    .setPaginationSize(paginationSize)
+    .setIncludeCollections(includeCollections)
+    .setDownloadImages(downloadImages);
+
   const client = createClient(shopName, accessToken, apiVersion);
 
   // Convenience function to namespace console messages.
