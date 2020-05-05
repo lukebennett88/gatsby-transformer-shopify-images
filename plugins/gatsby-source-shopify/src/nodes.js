@@ -29,7 +29,7 @@ const downloadImageAndCreateFileNode = async (
   // if pluginOptions !downloadImages then dont use default image
   const effectiveURL = PluginOptions.downloadImages
     ? url
-    : PluginOptions.defaultImage;
+    : PluginOptions.defaultImageUrl;
   
   let fileNodeID
   const mediaDataCacheKey = `${TYPE_PREFIX}__Media__${effectiveURL}`
