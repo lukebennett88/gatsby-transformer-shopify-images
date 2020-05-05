@@ -26,6 +26,10 @@ const downloadImageAndCreateFileNode = async (
   { url, nodeId },
   { createNode, createNodeId, touchNode, store, cache, getCache, reporter }
 ) => {
+  const effectiveURL = PluginOptions.downloadImages
+    ? url
+    : PluginOptions.defaultImage;
+
   let fileNodeID;
 
   const mediaDataCacheKey = `${TYPE_PREFIX}__Media__${url}`;
@@ -38,7 +42,7 @@ const downloadImageAndCreateFileNode = async (
   }
 
   const fileNode = await createRemoteFileNode({
-    url,
+    url: effectiveURL,
     store,
     cache,
     createNode,
@@ -68,13 +72,7 @@ export const ArticleNode = (imageArgs) =>
 
     if (node.image)
       node.image.localFile___NODE = await downloadImageAndCreateFileNode(
-        {
-          id: node.image.id,
-          url: PluginOptions.downloadImages
-            ? node.image.src
-            : PluginOptions.defaultImage,
-          nodeId: node.id,
-        },
+        { id: node.image.id, url: node.image.src, nodeId: node.id },
         imageArgs
       );
 
