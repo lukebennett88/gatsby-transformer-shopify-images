@@ -83,8 +83,10 @@ class PluginOptions {
     this.#downloadImages = downloadImages;
     return this;
   }
+
   setDefaultImage(defaultImage) {
-    this.#defaultImage = defaultImage
+    this.#defaultImage = defaultImage;
+    return this;
   }
 }
 
