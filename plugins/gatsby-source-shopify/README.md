@@ -74,6 +74,9 @@ plugins: [
       // Download Images Locally
       // set to false if you plan on using shopify's CDN
       downloadImages: true,
+      // default image URL
+      // if you set downloadImages to false then it will set all localFile of file from this URL
+      defaultImageURL: 'https://raw.githubusercontent.com/lukebennett88/gatsby-transformer-shopify-images/topic/shopify-option-downloadImages/plugins/gatsby-source-shopify/src/default.png'
     },
   },
 ]
