@@ -55,6 +55,7 @@ export const sourceNodes = async (
     paginationSize = 250,
     includeCollections = [SHOP, CONTENT],
     downloadImages = true,
+    defaultImage = 'https://raw.githubusercontent.com/lukebennett88/gatsby-transformer-shopify-images/topic/shopify-option-downloadImages/plugins/gatsby-source-shopify/src/default.png',
   }
 ) => {
   // created this singalton class as a quick way to reference options anywhere within the plugin
@@ -64,7 +65,8 @@ export const sourceNodes = async (
     .setVerbose(verbose)
     .setPaginationSize(paginationSize)
     .setIncludeCollections(includeCollections)
-    .setDownloadImages(downloadImages);
+    .setDownloadImages(downloadImages)
+    .setDefaultImage(defaultImage);
 
   const client = createClient(shopName, accessToken, apiVersion);
 

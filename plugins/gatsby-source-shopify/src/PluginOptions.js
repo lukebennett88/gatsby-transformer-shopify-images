@@ -15,6 +15,8 @@ class PluginOptions {
 
   #downloadImages;
 
+  #defaultImage;
+
   get shopName() {
     return this.#shopName;
   }
@@ -41,6 +43,10 @@ class PluginOptions {
 
   get downloadImages() {
     return this.#downloadImages;
+  }
+
+  get defaultImage() {
+    return this.#defaultImage;
   }
 
   setShopName(shopName) {
@@ -76,6 +82,9 @@ class PluginOptions {
   setDownloadImages(downloadImages) {
     this.#downloadImages = downloadImages;
     return this;
+  }
+  setDefaultImage(defaultImage) {
+    this.#defaultImage = defaultImage
   }
 }
 

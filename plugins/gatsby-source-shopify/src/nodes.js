@@ -28,10 +28,6 @@ const downloadImageAndCreateFileNode = async (
 ) => {
   let fileNodeID;
 
-  if (!PluginOptions.downloadImages) {
-    // Plugin Options states not to download images so returning earily
-    return undefined;
-  }
   const mediaDataCacheKey = `${TYPE_PREFIX}__Media__${url}`;
   const cacheMediaData = await cache.get(mediaDataCacheKey);
 
@@ -72,7 +68,13 @@ export const ArticleNode = (imageArgs) =>
 
     if (node.image)
       node.image.localFile___NODE = await downloadImageAndCreateFileNode(
-        { id: node.image.id, url: node.image.src, nodeId: node.id },
+        {
+          id: node.image.id,
+          url: PluginOptions.downloadImages
+            ? node.image.src
+            : PluginOptions.defaultImage,
+          nodeId: node.id,
+        },
         imageArgs
       );
 
