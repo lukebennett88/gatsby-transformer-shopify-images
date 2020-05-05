@@ -92,7 +92,7 @@ module.exports = {
         // Number of records to fetch on each request when building the cache
         // at startup. If your application encounters timeout errors during
         // startup, try decreasing this number.
-        paginationSize: 50,
+        paginationSize: 150,
 
         // List of collections you want to fetch.
         // Possible values are: 'shop' and 'content'.
